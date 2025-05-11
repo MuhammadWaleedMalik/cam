@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useGroq } from '../../hooks/useGroq'; // Update the import path
+import { useGroq } from '../../hooks/useGroq';
 
 const website = {
   name: "CemedBidAi",
@@ -20,58 +20,46 @@ const ProposalEnhancer = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState('');
   const [enhancementType, setEnhancementType] = useState('clarity');
-  
-  // Initialize the Groq hook
+
   const { fetchGroqResponse, response, loading, error: groqError } = useGroq();
 
   const enhancementOptions = [
-    { id: 'clarity', name: 'Improve Clarity', description: 'Make your content clearer and more concise' },
-    { id: 'persuasive', name: 'Increase Persuasiveness', description: 'Make your arguments more compelling' },
-    { id: 'compliance', name: 'Ensure Compliance', description: 'Check against procurement requirements' },
-    { id: 'structure', name: 'Improve Structure', description: 'Better organization and flow' },
-    { id: 'professional', name: 'Professional Tone', description: 'Elevate to formal business language' },
+    { id: 'clarity', name: 'Improve Clarity' },
+    { id: 'persuasive', name: 'Increase Persuasiveness' },
+    { id: 'compliance', name: 'Ensure Compliance' },
+    { id: 'structure', name: 'Improve Structure' },
+    { id: 'professional', name: 'Professional Tone' },
   ];
 
   const handleEnhance = async () => {
     if (!originalContent.trim()) {
-      setError('Please enter some content to enhance');
+      setError('Please enter some content to enhance.');
       return;
     }
 
     setIsEnhancing(true);
     setError('');
-    
+
+    const description = enhancementOptions.find(opt => opt.id === enhancementType)?.name || enhancementType;
+
     try {
-      // Get the enhancement description from the selected option
-      const enhancementDesc = enhancementOptions.find(opt => opt.id === enhancementType)?.description || '';
-      
-      // Call the Groq API
       await fetchGroqResponse(
-        `Enhance this proposal content to ${enhancementDesc}. Focus specifically on ${enhancementType}. Return only the enhanced content without additional commentary or labels.`,
+        `Enhance this proposal content to ${description}. Focus on ${enhancementType}. Return only the enhanced content.`,
         originalContent
       );
-      
-      // The response will be set in the hook's state and available in the `response` variable
     } catch (err) {
       setError('Failed to enhance content. Please try again.');
-      console.error(err);
     } finally {
       setIsEnhancing(false);
     }
   };
 
-  // Update enhancedContent when the Groq response changes
-  React.useEffect(() => {
-    if (response) {
-      setEnhancedContent(response);
-    }
+  useEffect(() => {
+    if (response) setEnhancedContent(response);
   }, [response]);
 
-  // Handle Groq errors
-  React.useEffect(() => {
-    if (groqError) {
-      setError(groqError);
-    }
+  useEffect(() => {
+    if (groqError) setError(groqError);
   }, [groqError]);
 
   const handleCopy = () => {
@@ -79,51 +67,71 @@ const ProposalEnhancer = () => {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  // ... rest of your component code remains the same ...
-  // (containerVariants, itemVariants, buttonVariants, optionVariants, etc.)
-
   return (
-    <motion.div 
-      className="min-h-screen py-12 text-black mt-12 px-4 sm:px-6 lg:px-8"
-      style={{ backgroundColor: website.colors.secondary }}
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
-      {/* ... rest of your JSX remains the same ... */}
-      
-      {/* Update the loading state to use the hook's loading state */}
+    <motion.div className="mt-52 min-h-screen bg-white py-10 px-4 sm:px-8 lg:px-16">
+      <h1 className="text-3xl font-bold mb-2 text-black">{website.name}</h1>
+      <p className="text-lg mb-6 text-gray-700">{website.slogan}</p>
+
+      <div className="mb-6">
+        <label htmlFor="originalContent" className="block text-black font-semibold mb-2">
+          Enter Your Proposal Content
+        </label>
+        <textarea
+          id="originalContent"
+          value={originalContent}
+          onChange={(e) => setOriginalContent(e.target.value)}
+          rows={6}
+          className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          placeholder="Paste your content here..."
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-black font-semibold mb-2">Choose Enhancement Type</label>
+        <div className="grid text-black  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {enhancementOptions.map(option => (
+            <label key={option.id} className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="enhancementType"
+                value={option.id}
+                checked={enhancementType === option.id}
+                onChange={(e) => setEnhancementType(e.target.value)}
+              />
+              <span>{option.name}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {error && <p className="text-red-600 mb-4">{error}</p>}
+
       <motion.button
         onClick={handleEnhance}
         disabled={isEnhancing || loading}
-        className="px-6 py-3 rounded-lg font-medium text-white flex items-center"
-        style={{ backgroundColor: website.colors.primary }}
-        variants={buttonVariants}
-        initial="rest"
-        whileHover="hover"
-        whileTap="tap"
+        className="mb-8 px-6 py-3 bg-orange-500 text-white rounded-lg shadow-md hover:bg-orange-600 transition disabled:opacity-60"
       >
-        {(isEnhancing || loading) ? (
-          <>
-            <motion.svg
-              className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            >
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </motion.svg>
-            Enhancing...
-          </>
-        ) : (
-          'Enhance Content'
-        )}
+        {(isEnhancing || loading) ? 'Enhancing...' : 'Enhance Content'}
       </motion.button>
 
-      {/* ... rest of your JSX remains the same ... */}
+      {enhancedContent && (
+        <div className="mb-6">
+          <label className="block text-black font-semibold mb-2">Enhanced Content</label>
+          <div className="relative">
+            <textarea
+              readOnly
+              value={enhancedContent}
+              rows={8}
+              className="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-800"
+            />
+            <CopyToClipboard text={enhancedContent} onCopy={handleCopy}>
+              <button className="absolute top-2 right-2 text-sm bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded">
+                {isCopied ? 'Copied!' : 'Copy'}
+              </button>
+            </CopyToClipboard>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

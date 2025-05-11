@@ -84,14 +84,14 @@ const AITenderGenerator = () => {
       style={{ backgroundColor: website.colors.secondary }}
       initial="hidden"
       animate="visible"
-      variants={containerVariants}
+      
     >
       <div className="max-w-4xl mx-auto">
         {/* ... existing header and instructions ... */}
 
         <motion.div 
           className="mb-8"
-          variants={itemVariants}
+         
         >
           <label htmlFor="prompt" className="block text-lg font-medium text-gray-700 mb-2">
             Describe your tender requirements:
@@ -111,7 +111,7 @@ const AITenderGenerator = () => {
               disabled={isGenerating || loading}
               className="px-6 py-3 rounded-lg font-medium text-black flex items-center"
               style={{ backgroundColor: website.colors.primary }}
-              variants={buttonVariants}
+              
               initial="rest"
               whileHover="hover"
               whileTap="tap"
@@ -123,7 +123,7 @@ const AITenderGenerator = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    variants={loadingVariants}
+                  
                     initial="start"
                     animate="end"
                   >

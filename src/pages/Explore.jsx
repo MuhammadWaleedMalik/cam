@@ -57,6 +57,7 @@ const Explore = () => {
       link: '/enhance-tenders',
       bgColor: 'bg-yellow-50',
     },
+    
     {
       id: 6,
       title: 'Enhance Proposals',
@@ -65,8 +66,39 @@ const Explore = () => {
       link: '/enhance-proposals',
       bgColor: 'bg-red-50',
     },
-  
-    
+    {
+      id: 7,
+      title: 'Document Library',
+      description: 'Streamline your bid management process with AI-driven tracking and reporting tools.',
+      icon: '📊',
+      link: '/docs-management',
+      bgColor: 'bg-teal-50',
+    },
+    {
+      id: 8,
+      title: 'Project Management',
+      description: 'Manage your project efficiently with AI-powered organization and retrieval systems.',
+      icon: '📈',
+      link: '/project-management',
+      bgColor: 'bg-pink-50',
+    },
+    {
+      id: 9,
+      title: 'Branded Documents ',
+      description: 'Optimize your Docs with AI-driven tracking and reporting tools.',
+      icon: '📋',
+      link: '/brandeddocs-management',
+      bgColor: 'bg-gray-50',
+    },
+    {
+      id: 10,
+      title: 'Knowledge Base',
+      description: 'Manage your proposal process efficiently with AI-powered organization and retrieval systems.',
+      icon: '🗂️',
+      link: '/Knowledge-Base',
+      bgColor: 'bg-indigo-50',
+    }
+
   ];
     
   // Animation variants

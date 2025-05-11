@@ -30,6 +30,10 @@ import TenderEnhancer from './pages/features/TendersEnhance';
 import ProposalEnhancer from './pages/features/ProposalsEnhance';
 import AITenderGenerator from './pages/features/Tenders';
 import AIProposalGenerator from './pages/features/Proposals';
+import DocsManagement from './pages/features/DocsManagement';
+import ProjectManagement from './pages/features/Projectmanagement';
+import KnowledgeBase from './pages/features/Knowledgebase';
+import DocsPage from './pages/features/BrandedDocs';
 
 
 
@@ -70,13 +74,21 @@ function App() {
                     <Route path="pricing/basic" element={<PricingBasic />} />
                     <Route path="pricing/enterprise" element={<PricingEnterprice />} />
           
-          <Route path="/ai-generated-bids"  element={<AIBidGenerator    />} />
+         <Route path="/ai-generated-bids"  element={<AIBidGenerator    />} />
           <Route path="/ai-generated-tenders"  element={<AITenderGenerator    />} />
           <Route path="/ai-generated-proposals"  element={<AIProposalGenerator    />} />
           
           <Route path="/enhance-bids"  element={<AIBidEnhancer    />} />
           <Route path="/enhance-tenders"  element={<TenderEnhancer    />} />
           <Route path="/enhance-proposals"  element={<ProposalEnhancer    />} />
+
+          
+        
+          <Route path="/docs-management"  element={<DocsManagement    />} />
+          <Route path="/project-management"  element={<ProjectManagement   />} />
+          <Route path="/brandeddocs-management"  element={<DocsPage    />} />
+          <Route path="/Knowledge-Base"  element={<KnowledgeBase      />} />
+
         
           
         </Route>
